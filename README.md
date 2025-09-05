@@ -15,7 +15,7 @@ A high-performance, real-time collaborative pixel canvas inspired by r/place. Bu
 - ✅ Real-time collaborative pixel painting
 - ✅ Tile-based rendering with lazy loading
 - ✅ Redis-powered sub-millisecond pixel updates
-- ✅ Rate limiting (1 pixel per 2 seconds)
+- ✅ Rate limiting (1 pixel per 2 seconds) (currently set to a lot just for fun)
 - ✅ Zoom and pan with smooth scaling
 - ✅ WebSocket auto-reconnection
 - ✅ Atomic pixel updates with Lua scripts
