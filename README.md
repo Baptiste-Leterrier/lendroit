@@ -1,4 +1,4 @@
-# Place - Collaborative Pixel Canvas
+# L'Endroit - Collaborative Pixel Canvas
 
 A high-performance, real-time collaborative pixel canvas inspired by r/place. Built with Redis for ultra-low latency pixel updates and WebSocket for real-time communication.
 
