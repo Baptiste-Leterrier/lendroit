@@ -6,6 +6,7 @@ import ImageUpload from './components/ImageUpload';
 import './App.css';
 
 const WS_URL = process.env.REACT_APP_WS_URL || 'ws://localhost:9001';
+console.log(process.env.REACT_APP_WS_URL);
 
 function App() {
   const [ws, setWs] = useState(null);
