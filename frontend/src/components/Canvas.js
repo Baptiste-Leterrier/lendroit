@@ -288,7 +288,28 @@ function Canvas({ ws, selectedColor, onPixelPlace, rateLimited, imageMode, pendi
     if (!container) return;
 
     const wheelHandler = (e) => {
-      handleWheel(e);
+      e.preventDefault();
+      e.stopPropagation(); // Prevent page zoom
+      
+      const rect = container.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      
+      const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
+      
+      setScale(prevScale => {
+        const newScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, prevScale * zoomFactor));
+        
+        if (newScale !== prevScale) {
+          const scaleDiff = newScale - prevScale;
+          setOffset(prevOffset => ({
+            x: prevOffset.x - (mouseX - prevOffset.x) * (scaleDiff / prevScale),
+            y: prevOffset.y - (mouseY - prevOffset.y) * (scaleDiff / prevScale)
+          }));
+        }
+        
+        return newScale;
+      });
     };
 
     // Add event listener with passive: false to allow preventDefault
@@ -297,7 +318,7 @@ function Canvas({ ws, selectedColor, onPixelPlace, rateLimited, imageMode, pendi
     return () => {
       container.removeEventListener('wheel', wheelHandler);
     };
-  }, [handleWheel]);
+  }, []); // Empty dependency array - event handler is self-contained
 
   // Mouse handlers
   const handleMouseDown = useCallback((e) => {
@@ -352,26 +373,6 @@ function Canvas({ ws, selectedColor, onPixelPlace, rateLimited, imageMode, pendi
     }
   }, [isDragging, offset, scale, selectedColor, onPixelPlace, rateLimited, imageMode, onImagePlace]);
 
-  const handleWheel = useCallback((e) => {
-    e.preventDefault();
-    e.stopPropagation(); // Prevent page zoom
-    
-    const rect = containerRef.current.getBoundingClientRect();
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    
-    const zoomFactor = e.deltaY > 0 ? 0.9 : 1.1;
-    const newScale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, scale * zoomFactor));
-    
-    if (newScale !== scale) {
-      const scaleDiff = newScale - scale;
-      setScale(newScale);
-      setOffset({
-        x: offset.x - (mouseX - offset.x) * (scaleDiff / scale),
-        y: offset.y - (mouseY - offset.y) * (scaleDiff / scale)
-      });
-    }
-  }, [scale, offset]);
 
   return (
     <div 
