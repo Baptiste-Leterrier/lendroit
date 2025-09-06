@@ -282,6 +282,23 @@ function Canvas({ ws, selectedColor, onPixelPlace, rateLimited, imageMode, pendi
     requestRedraw();
   }, [requestRedraw]);
 
+  // Handle wheel events with proper passive: false
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    const wheelHandler = (e) => {
+      handleWheel(e);
+    };
+
+    // Add event listener with passive: false to allow preventDefault
+    container.addEventListener('wheel', wheelHandler, { passive: false });
+
+    return () => {
+      container.removeEventListener('wheel', wheelHandler);
+    };
+  }, [handleWheel]);
+
   // Mouse handlers
   const handleMouseDown = useCallback((e) => {
     if (rateLimited) return;
@@ -365,7 +382,6 @@ function Canvas({ ws, selectedColor, onPixelPlace, rateLimited, imageMode, pendi
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
       onClick={handleClick}
-      onWheel={handleWheel}
     >
       <canvas ref={canvasRef} className="main-canvas" />
       
