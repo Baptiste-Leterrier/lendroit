@@ -14,6 +14,8 @@ COPY . .
 ARG REACT_APP_WS_URL
 ENV REACT_APP_WS_URL=$REACT_APP_WS_URL
 
+RUN echo "Building with REACT_APP_WS_URL=$REACT_APP_WS_URL"
+
 # Build the app
 RUN npm run build
 
